@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <title>오늘의 투두</title>
+</head>
+
+<style>
+    #title {
+        color: blue;
+        text-decoration: underline;
+    }
+    
+    .wrap {
+        display: flex;
+    }
+    
+    .todo-title {
+        border: black 1px solid;
+        border-radius: 5px;
+        margin: 1em;
+        padding: 2em;
+    }
+    
+    button {
+        width: calc(80% - 20px);
+    }
+    
+    button:hover {
+        background-color: orange;
+    }
+</style>
+
+<body>
+    <h1 id="title">오늘 할 일</h1>
+    <div class="wrap">
+        <div class="todo-title">
+            <h3>고양이 밥주기</h3>
+            <p>고양이 물, 사료 챙겨주기</p>
+            <button onclick="changeColor(0)">완료</button>
+        </div>
+
+        <div class="todo-title">
+            <h3>장보기</h3>
+            <p>토마토, 계란, 초코렛 사기</p>
+            <button>완료</button>
+        </div>
+    </div>
+
+    <div class="wrap">
+        <div class="todo-title">
+            <h3>코딩하기</h3>
+            <p>리액트 강의 1주차 듣기</p>
+            <button>완료</button>
+        </div>
+        <div class="todo-title">
+            <h3>딩코하기</h3>
+            <p>리액트 강의 1주차 듣기</p>
+            <button>완료</button>
+        </div>
+    </div>
+    <script>
+        function sayHello(event) {
+            console.log("hello");
+        }
+
+        function changeColor(index) {
+            titles[index].style.backgroundColor = "gray";
+        }
+
+
+        const wraps = document.getElementsByClassName("wrap");
+        const title = document.getElementById("title");
+        const tag_b = document.getElementsByTagName("button");
+        const titles = document.getElementsByClassName("todo-title");
+
+        console.log(wraps);
+        console.log(title);
+        console.log(tag_b);
+
+        title.style.backgroundColor = "Red";
+        for (let i = 0; i < tag_b.length; i++) {
+            tag_b[i].addEventListener("Click", sayHello());
+        }
+
+        const new_div = document.createElement("div");
+        new_div.style.backgroundColor = "Red";
+        new_div.style.width = "100px";
+        new_div.style.height = "100px";
+
+        document.body.appendChild(new_div);
+    </script>
+</body>
+
+</html>

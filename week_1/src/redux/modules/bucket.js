@@ -3,11 +3,8 @@ import {db} from "../../firebase";
 import { addDoc, collection, updateDoc, deleteDoc, doc, getDoc, getDocs } from "firebase/firestore";
 
 // Actions
-const LOAD = 'bucket/LOAD';
-const CREATE = 'bucket/CREATE';
-const DELETE = 'bucket/DELETE';
-const UPDATE  = 'bucket/UPDATE';
-
+const LOAD = 'day/LOAD';
+const UPDATE  = 'day/UPDATE';
 const initalState = {
     is_loaded : false,
     list : []
@@ -15,106 +12,59 @@ const initalState = {
 
 
 // Action Creators
-export function loadBucket(bucket_list){
-    return {type: LOAD, bucket_list}
+export function loadBucket(day_list){
+    return {type: LOAD, day_list}
 }
-export function createBucket(bucket){
-    return {type: CREATE, bucket}
-}
-export function deleteBucket(bucket_index){
-    return {type: DELETE, bucket_index}
-}
-export function updateBucket(bucket_index){
-    return {type: UPDATE, bucket_index}
+export function updateScore(day_list,score){
+    return {type: UPDATE, day_list,score}
 }
 
 
 //middlewares
 export const loadBucketFB = () => {
     return async function (dispatch) {
-        const bucket_data = await getDocs(collection(db, "bucket"));
-    
-        let bucket_list  = [];
+        const day_data = await getDocs(collection(db, "day"));
+        let day_list  = [];
 
-        bucket_data.forEach((b) => {
-            bucket_list.push({ id: b.id, ...b.data() });
+        day_data.forEach((b) => {
+            day_list.push({ id: b.id, ...b.data() });
         });
 
-        console.log(bucket_list);
-        dispatch(loadBucket(bucket_list));
+        dispatch(loadBucket(day_list));
     }
 }
 
-export const addBucketFB = (bucket) => {
-    return async function (dispatch) {
-        const docRef = await addDoc(collection(db, "bucket"),{text : bucket, completed : false});
-        
-        const bucket_data = {id : docRef.id, text : bucket, completed : false}
 
-        dispatch(createBucket(bucket_data));
-    }
-}
-
-export const updateBucketFB = (bucket_id) => {
+export const updateScoreFB = (day_id,score) => {
     return async function (dispatch, getState){
-        const docRef = doc(db,"bucket",bucket_id);
-        await updateDoc(docRef,{completed : true});
-        //console.log((await getDoc(docRef)).data());
-        console.log(getState().bucket);
-        const bucket_index = getState().bucket.list.findIndex((b) => {
-            return b.id ===bucket_id;
-        });
-        dispatch(updateBucket(bucket_index));
-    }
-
-}
-
-
-export const deleteBucketFB = (bucket_id) => {
-    return async function (dispatch, getState){
-
-        const docRef = doc(db,"bucket",bucket_id);
-        console.log((await getDoc(docRef)).data());
         
-        console.log(getState().bucket);
-        const bucket_index = getState().bucket.list.findIndex((b) => {
-            return b.id ===bucket_id;
+        const docRef = doc(db,"day",day_id);
+        await updateDoc(docRef,{score : score});
+        
+        const day_index = getState().bucket.list.findIndex((b) => {
+            return b.id ===day_id;
         });
-        await deleteDoc(docRef);
-        dispatch(deleteBucket(bucket_index));
+        dispatch(updateScore(day_index,score));
     }
 
 }
-
 
 
 // Reducer
 export default function reducer(state = initalState, action = {}) {
     switch (action.type) {
-        case "bucket/CREATE" : {
-            const new_bucket_list = [...state.list, action.bucket];
-            return {...state, list : new_bucket_list};
-        }
-        case "bucket/DELETE" : {
-            const new_bucket_list = state.list.filter((v,i) => {
-                return i !== parseInt(action.bucket_index);
-            });
-            return {...state, list : new_bucket_list};
-        }
-        case "bucket/UPDATE": {
-            const new_bucket_list = state.list.map((l, idx) => {
-                if (parseInt(action.bucket_index) === idx) {
-                    return { ...l, completed: true };
+        case "day/UPDATE": {
+            const new_day_list = state.list.map((l, idx) => {
+                if (parseInt(action.day_list) === idx) {
+                    return { ...l, score : action.score};
                 }
                 else
                     return l;
-                
             });
-            console.log({ list: new_bucket_list });
-            return {...state, list: new_bucket_list};
+            return {...state, list: new_day_list};
         }
-        case "bucket/LOAD": {
-            return {list: action.bucket_list, is_loaded : true}
+        case "day/LOAD": {
+            return {list: action.day_list, is_loaded : true}
         }
 
         default: return state;

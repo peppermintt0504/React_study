@@ -4,6 +4,8 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom"
 import {useSelector} from "react-redux";
 
+import "./App.css";
+
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 
@@ -33,7 +35,7 @@ const ListStyle = styled.div`
 display: flex;
 flex-direction: column;
 max-height : 70vh;
-height: 60vh;
+height: 65vh;
 overflow-x: hidden;
 overflow-y: auto;
 
@@ -44,7 +46,7 @@ const ItemStyle = styled.div`
 padding: 16px;
 margin: 8px;
 font-size : 25px;
-color: ${(props) => (props.completed ? "#fff":"#000")};
+color: #15aa;
 background-color: ${(props) => (props.completed ? "#15aa":"#eee")};
 text-align : center
 

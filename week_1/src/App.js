@@ -4,6 +4,7 @@ import Detail from "./Detail";
 import NotFound from "./NotFound";
 import Spinner from "./Spinner";
 
+import './App.css';
 
 import styled from "styled-components";
 import { Route, Routes } from "react-router-dom";
@@ -11,6 +12,10 @@ import {useDispatch, useSelector} from "react-redux";
 import { loadBucketFB, addBucketFB} from "./redux/modules/bucket";
 import {db} from "./firebase";
 import { addDoc, collection, updateDoc, deleteDoc, doc, getDoc, getDocs } from "firebase/firestore";
+
+
+
+
 
 function App() {
   
@@ -27,7 +32,7 @@ function App() {
   return (
     <div className="App">
       <Container>
-        <Title>내 일주일은?</Title>
+        <Title>How was this week?</Title>
         <Line />
         <Routes>
           <Route path="/" element={<DayOfWeek />}></Route>
@@ -43,13 +48,13 @@ function App() {
 
 
 const Container = styled.div`
-max-width: 400px;
-min-height: 600px;
-background-color: #fff;
-padding: 16px;
-margin: 50px auto;
-border-radius: 5px;
-border: 1px solid #ddd;
+  max-width: 400px;
+  min-height: 650px;
+  background-color: #fff;
+  padding: 16px;
+  margin: 50px auto;
+  border-radius: 5px;
+  border: 1px solid #ddd;
 `;
 
 const Title = styled.h1`

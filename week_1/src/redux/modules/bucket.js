@@ -27,7 +27,7 @@ export const loadBucketFB = () => {
         let day_list  = [];
 
         day_data.forEach((b) => {
-            day_list.push({ id: b.id, ...b.data() });
+            day_list.push({ id: b.id, ...b.data(), score : Math.ceil(Math.random()*5) });
         });
 
         dispatch(loadBucket(day_list));

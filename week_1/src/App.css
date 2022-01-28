@@ -1,3 +1,29 @@
+
+@font-face {
+  font-family: "MochiyPopPOne-Regular";
+  src: url("./fonts/MochiyPopPOne-Regular.ttf");
+}
+
+*{
+  font-family: 'MochiyPopPOne-Regular', sans-serif;
+  color: rgba(15, a, a, 0.892);
+}
+
+.font_t{
+  font-family: 'MochiyPopPOne-Regular', sans-serif;
+  color: rgba(15, a, a, 0.892);
+}
+
+.save_button{
+  margin : 100px auto;
+  
+}
+
+.star{
+  height: 100px;
+  width: 100px;
+}
+
 .App {
   text-align: center;
 }

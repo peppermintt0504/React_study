@@ -1,27 +1,55 @@
 import React from "react"
 import styled from "styled-components";
 import {useDispatch, useSelector} from "react-redux";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes, useNavigate,useParams } from "react-router-dom";
 
 import {db} from "./firebase";
-import {createDicFB} from "./redux/modules/dict"
+import {loadDicFB,createDicFB} from "./redux/modules/dict"
 
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 
 import "./App.css"
 import { SnowshoeingOutlined } from "@mui/icons-material";
+import { type } from "@testing-library/user-event/dist/type";
 
-function Writing(){
-
+function Writing(props){
+    const params = useParams();
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const word_id = params.id;
 
+    React.useEffect(async() => {
+        dispatch(loadDicFB());
+    
+    },[]);
+
+    const data = useSelector((state) => state.dict.list);
+    console.log(data);
+    console.log(word_id);
+
+    
     const word = React.useRef(null);
     const pron = React.useRef(null);
     const mean = React.useRef(null);
     const exam = React.useRef(null);
     const inter = React.useRef(null);
+
+    console.log(word);
+
+    if(props.post_type === 'rectify'){
+        const word_date = data.filter((v,i) =>{
+            console.log(v.id === word_id);
+            return v.id === word_id?true:false});
+
+        word.current.value = word_date[0].word;
+        pron.current.value = word_date[0].pron;
+        mean.current.value = word_date[0].mean;
+        exam.current.value = word_date[0].exam;
+        inter.current.value = word_date[0].interpretation;
+    }
+
+
 
     const addDict = () =>{
         let new_word = {word : word.current.value,
@@ -35,10 +63,24 @@ function Writing(){
         navigate("/");
     }
 
+    const rectifyDict = () =>{
+        let new_word = {word : word.current.value,
+                        pron : pron.current.value,
+                        mean : mean.current.value,
+                        exam : exam.current.value,
+                        interpretation: inter.current.value,};
+        
+        
+        window.alert("단어가 수정되었습니다.")
+        navigate("/");
+    }
+
+
+
     return (
 
         <Box>
-            <h1>단어 추가하기</h1>
+            {props.post_type === 'create'?<h1>단어 추가하기</h1>:<h1>단어 수정하기</h1>}
             <p>단어</p>
             <input type="text" ref = {word}></input>
             <p>발음</p>
@@ -50,7 +92,8 @@ function Writing(){
             <p>해석</p>
             <input type="text" ref = {inter}></input>
             <div>
-                <Button onClick={() => addDict()} variant="outlined" size="large"><AddIcon/></Button>
+                {props.post_type === 'create'?<h1><Button onClick={() => addDict()} variant="outlined" size="large"><AddIcon/></Button></h1>:<h1><Button onClick={() => rectifyDict()} variant="outlined" size="large"><AddIcon/></Button></h1>}
+                
             </div>
         </Box>
 

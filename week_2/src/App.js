@@ -32,7 +32,8 @@ function App() {
       <Warp>   
         <Routes>
           <Route path="/" element={<Words />}/>
-          <Route path="/writing" element={<Writing />}/>
+          <Route path="/writing/:id" element={<Writing post_type='rectify'/>}/>
+          <Route path="/writing" element={<Writing post_type='create'/>}/>
         </Routes>
       </Warp>
       

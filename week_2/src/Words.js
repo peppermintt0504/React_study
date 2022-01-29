@@ -16,6 +16,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
 
+import { FaPlus } from "react-icons/fa";
+
 import "./App.css"
 
 function Words(props) {
@@ -29,6 +31,7 @@ function Words(props) {
 
     const delete_word = (word_id) =>{
         dispatch(deleteDicFB(word_id));
+        window.alert("삭제되었습니다.")
     };
 
     return (
@@ -40,7 +43,7 @@ function Words(props) {
             return (
                     <Card key = {index}>
                         <Check><CheckCircleOutlineIcon/></Check>
-                        <Rectify><BorderColorOutlinedIcon/></Rectify>
+                        <Rectify onClick={()=> navigate("/writing/"+ val.id)}><BorderColorOutlinedIcon/></Rectify>
                         <Delete onClick={()=>( delete_word(val.id))}><DeleteOutlineIcon/></Delete>
                         <h1>{val.word}</h1>
                         <h2>{val.pron}</h2>
@@ -49,7 +52,7 @@ function Words(props) {
                         <p>{val.interpretation}</p>
                     </Card>
         )})}
-            <Button><button onClick={() => navigate("/writing")} style={{ color: "white", backgroundColor: "#15aa"}} aria-label="add"><AddIcon/></button></Button>
+            <Button><button onClick={() => navigate("/writing")}><p><FaPlus color ="#15aa" size="25"/></p></button></Button>
         </Container>
     )
 }
@@ -57,24 +60,26 @@ function Words(props) {
 
 const Container = styled.div`
     margin: auto;
-    width : 75vw;
+    width : 75%;
     display: flex;
     flex-direction : row;
-    justify-content: space-evenly;
+    justify-content: flex-start;
     flex-wrap: wrap;
     padding : auto;
+    gap: 10px;
 `;
 
 const Card = styled.div`
     height : 150px;
-    width : 20vw;
-    margin : 20px 20px;
-    padding : 15px;
+    width : calc(( 100% - 146px )/3);
+    margin : 0;
+    padding : 20px;
     background-color : #a1afff3b;
     border : 1px solid #8b84d4b5;
     border-radius : 10px;
     text-align:left;
     position : relative;
+    
 
     & h1{
         font-size : 20px;
@@ -99,7 +104,7 @@ const btnAnimation = keyframes`
         transform: rotate(0deg);
     }
     100%{
-        transform: rotate(360deg);
+        transform: rotate(90deg);
     }
 
 `;
@@ -108,15 +113,28 @@ const Button = styled.div`
     position : fixed;
     right : 5vw;
     top : 90vh;
+    margin : auto;
+    align-items: center;
+    
     & button {
+        position:relative;
         height : 60px;
         width : 60px;
         border : 1px solid white;
         border-radius : 60px;
+        padding : 0;
+        & p{
+        left: 50%;
+        top: 50%;
+        transform: translate(-1%, 6%);
     }
+    }
+    
     :hover {
-        animation: ${btnAnimation} 2s infinite linear
+        animation: ${btnAnimation} 1s linear
     };
+    
+    
 `;
 
 const Check = styled.div`

@@ -126,7 +126,7 @@ const Button = styled.div`
         & p{
         left: 50%;
         top: 50%;
-        transform: translate(-1%, 6%);
+        transform: translate( 2%, 6%);
     }
     }
     

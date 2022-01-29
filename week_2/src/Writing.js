@@ -18,36 +18,41 @@ function Writing(props){
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const word_id = params.id;
-
-    React.useEffect(async() => {
-        dispatch(loadDicFB());
-    
-    },[]);
+    const count = 0
 
     const data = useSelector((state) => state.dict.list);
-    console.log(data);
-    console.log(word_id);
 
-    
     const word = React.useRef(null);
     const pron = React.useRef(null);
     const mean = React.useRef(null);
     const exam = React.useRef(null);
     const inter = React.useRef(null);
 
-    console.log(word);
 
-    if(props.post_type === 'rectify'){
-        const word_date = data.filter((v,i) =>{
-            console.log(v.id === word_id);
-            return v.id === word_id?true:false});
 
-        word.current.value = word_date[0].word;
-        pron.current.value = word_date[0].pron;
-        mean.current.value = word_date[0].mean;
-        exam.current.value = word_date[0].exam;
-        inter.current.value = word_date[0].interpretation;
+
+    React.useEffect(async() => {
+        dispatch(loadDicFB());
+
+        return (0)
+    },[]);
+
+    if(props.post_type !== 'create'){
+        var word_data = data.filter((v,i) => {
+            return v.id === word_id ? true:false;
+        })[0];
+        console.log(word_data)
+
+        // word.current.value?console.log("ooo"):console.log("xx")
+        // word.current.value = word_data.word;
+        // pron.current.value = word_data.pron;
+        // mean.current.value = word_data.mean;
+        // exam.current.value = word_data.exam;
+        // inter.current.value = word_data.interpretation;
+        
     }
+
+    
 
 
 
@@ -82,20 +87,23 @@ function Writing(props){
         <Box>
             {props.post_type === 'create'?<h1>단어 추가하기</h1>:<h1>단어 수정하기</h1>}
             <p>단어</p>
-            <input type="text" ref = {word}></input>
+            {word_data?<input type="text" ref = {word} defaultValue={word_data.word}></input>:<input type="text" ref = {word}></input>}
             <p>발음</p>
-            <input type="text" ref = {pron}></input>
+            {word_data?<input type="text" ref = {pron} defaultValue={word_data.pron}></input>:<input type="text" ref = {pron}></input>}
             <p>의미</p>
-            <input type="text" ref = {mean}></input>
+            {word_data?<input type="text" ref = {mean} defaultValue={word_data.mean}></input>:<input type="text" ref = {mean}></input>}
             <p>예문</p>
-            <input type="text" ref = {exam}></input>
+            {word_data?<input type="text" ref = {exam} defaultValue={word_data.exam}></input>:<input type="text" ref = {exam}></input>}
             <p>해석</p>
-            <input type="text" ref = {inter}></input>
+            {word_data?<input type="text" ref = {inter} defaultValue={word_data.interpretation}></input>:<input type="text" ref = {inter}></input>}
             <div>
-                {props.post_type === 'create'?<h1><Button onClick={() => addDict()} variant="outlined" size="large"><AddIcon/></Button></h1>:<h1><Button onClick={() => rectifyDict()} variant="outlined" size="large"><AddIcon/></Button></h1>}
+                {props.post_type === 'create'?
+                <h1><Button onClick={() => addDict()} variant="outlined" size="large"><AddIcon/></Button></h1>:
+                <h1><Button onClick={() => rectifyDict()} variant="outlined" size="large"><AddIcon/></Button></h1>}
                 
             </div>
         </Box>
+        
 
     );
 

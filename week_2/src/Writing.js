@@ -32,7 +32,7 @@ function Writing(){
         
         dispatch(createDicFB(new_word));
         window.alert("단어가 추가되었습니다.")
-        //navigate("/");
+        navigate("/");
     }
 
     return (

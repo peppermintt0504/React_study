@@ -14,12 +14,12 @@ import {   collection,
 // Actions
 const LOAD = 'dict/LOAD';
 const CREATE = 'dict/CREATE';
-const UPDATE = 'dict/UPDATE';
-const REMOVE = 'dict/REMOVE';
+const DELETE = 'dict/DELETE';
+
 
 const initialState = {
     list : [
-        
+
     ],
 };
 
@@ -30,7 +30,9 @@ return { type: LOAD , dict};
 export function createDict(new_dict) {
     return { type: CREATE , new_dict};
     }
-
+export function deleteDict(word_index) {
+    return { type: DELETE , word_index};
+}
 
 // middle ware
 export const loadDicFB = () => {
@@ -40,7 +42,6 @@ export const loadDicFB = () => {
     
         let dic_list  = [];
 
-      // 하나씩 우리가 쓸 수 있는 배열 데이터로 만든다
         bucket_data.forEach((b) => {
         dic_list.push({ id: b.id, ...b.data() });
         });
@@ -59,6 +60,19 @@ export const createDicFB = (new_word) => {
     }
 }
 
+export const deleteDicFB = (word_id) => {
+    return async function (dispatch,getState) {
+        
+        const docRef = doc(db,"dic",word_id);
+        await getDoc(docRef);
+        await deleteDoc(docRef);
+        
+        const word_index = getState().dict.list.reduce((x,val,index)=>{return val.id === word_id?index:x});
+        dispatch(deleteDict(word_index));
+        
+    }
+}
+
 // Reducer
 export default function reducer(state = initialState, action = {}) {
     switch (action.type) {
@@ -66,10 +80,16 @@ export default function reducer(state = initialState, action = {}) {
             return {...state,list : action.dict};
         }
         case "dict/CREATE" : {
-            console.log(state, action.new_dict)
-            return null;
+            return {...state, list : [...state.list,action.new_dict]};
         }
-
+        case "dict/DELETE" : {
+            console.log(action.word_index);
+            const new_dict = state.list.filter((val,index) => {
+                return index !==action.word_index?true:false;
+            });
+            console.log(new_dict)
+            return {...state,list : [...new_dict]};
+        }
         default: {
             return state;
         }

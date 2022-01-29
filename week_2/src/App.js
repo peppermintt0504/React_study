@@ -17,12 +17,9 @@ import { ConstructionOutlined } from "@mui/icons-material";
 
 function App() {
   const navigate = useNavigate();
-
-  const data = useSelector((state) => state);
   const Dispatch = useDispatch();
   
   React.useEffect(async() => {
-    console.log()
     Dispatch(loadDicFB());
 
   },[]);
@@ -55,6 +52,8 @@ const Head = styled.div`
   text-align : center;
   justify-content: center;
   margin : auto;
+  position : fixed;
+  top : 0px;
 `;
 const Title = styled.div`
   padding : 10px;
@@ -63,25 +62,12 @@ const Title = styled.div`
   
 `;
 const Warp = styled.div`
+  margin-top : 70px;
   display: flex;
   flex-direction : column;
   justify-content: center; 
   padding : auto;
-`
-const Container = styled.div`
-  display: flex;
-  flex-direction : row;
-  justify-content: center; 
-  padding : auto;
 `;
 
-const Card = styled.div`
-  height : 150px;
-  width : 23vw;
-  margin : 20px 20px;
-  background-color : #a1afff3b;
-  border : 1px solid #8b84d4b5;
-  border-radius : 10px;
-`;
 
 export default App;

@@ -18,24 +18,18 @@ const UPDATE = 'dict/UPDATE';
 const REMOVE = 'dict/REMOVE';
 
 const initialState = {
-    list : [{word : "안녕", },
-            {word : "안녕", },
-            {word : "나는", },
-            {word : "안녕", },
-            {word : "헬로", },
-            {word : "흠", },
-            {word : "배고파", },
-            {word : "치킨", },
-            {word : "주세여", },
-            {word : "짠", },
-],
+    list : [
+        
+    ],
 };
 
 // Action Creators
 export function loadDict(dict) {
 return { type: LOAD , dict};
 }
-
+export function createDict(new_dict) {
+    return { type: CREATE , new_dict};
+    }
 
 
 // middle ware
@@ -56,11 +50,24 @@ export const loadDicFB = () => {
     }
 }
 
+export const createDicFB = (new_word) => {
+    return async function (dispatch) {
+        const docRef = await addDoc(collection(db, "dic"),new_word);
+        const new_word_data = {id : docRef.id, ...new_word};
+        console.log(new_word_data);
+        dispatch(createDict(new_word_data));
+    }
+}
+
 // Reducer
 export default function reducer(state = initialState, action = {}) {
     switch (action.type) {
         case "dict/LOAD": {
             return {...state,list : action.dict};
+        }
+        case "dict/CREATE" : {
+            console.log(state, action.new_dict)
+            return null;
         }
 
         default: {

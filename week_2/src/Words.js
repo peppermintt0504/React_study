@@ -1,16 +1,19 @@
 import React from "react"
 import styled from "styled-components";
 import {useDispatch, useSelector} from "react-redux";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate} from "react-router-dom";
 
 import {db} from "./firebase";
 import {loadDicFB} from "./redux/modules/dict"
+
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+
 
 import "./App.css"
 
 function Words(props) {
 
-    
+    const navigate = useNavigate();
     
     const Dispatch = useDispatch();
 
@@ -33,6 +36,7 @@ function Words(props) {
                         <p>{da[i].interpretation}</p>
                     </Card>
         )})}
+            <Button onClick={() => navigate("/Writing")}><AddCircleIcon/></Button>
         </Container>
     )
 }
@@ -76,5 +80,11 @@ const Card = styled.div`
     }
 `;
 
+const Button = styled.div`
+    border : 0;
+    position : fixed;
+    right : 5vw;
+    top : 90vh;
+`;
 
 export default Words;

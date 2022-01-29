@@ -4,7 +4,7 @@ import {useDispatch, useSelector} from "react-redux";
 import { Route, Routes, useNavigate,useParams } from "react-router-dom";
 
 import {db} from "./firebase";
-import {loadDicFB,createDicFB} from "./redux/modules/dict"
+import {loadDicFB,createDicFB,updateDicFB} from "./redux/modules/dict"
 
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
@@ -33,23 +33,13 @@ function Writing(props){
 
     React.useEffect(async() => {
         dispatch(loadDicFB());
-
-        return (0)
     },[]);
 
     if(props.post_type !== 'create'){
         var word_data = data.filter((v,i) => {
             return v.id === word_id ? true:false;
         })[0];
-        console.log(word_data)
-
-        // word.current.value?console.log("ooo"):console.log("xx")
-        // word.current.value = word_data.word;
-        // pron.current.value = word_data.pron;
-        // mean.current.value = word_data.mean;
-        // exam.current.value = word_data.exam;
-        // inter.current.value = word_data.interpretation;
-        
+    
     }
 
     
@@ -61,7 +51,8 @@ function Writing(props){
                         pron : pron.current.value,
                         mean : mean.current.value,
                         exam : exam.current.value,
-                        interpretation: inter.current.value,};
+                        interpretation: inter.current.value,
+                        check : true};
         
         dispatch(createDicFB(new_word));
         window.alert("단어가 추가되었습니다.")
@@ -73,9 +64,10 @@ function Writing(props){
                         pron : pron.current.value,
                         mean : mean.current.value,
                         exam : exam.current.value,
-                        interpretation: inter.current.value,};
+                        interpretation: inter.current.value,
+                        id : word_id};
         
-        
+        dispatch(updateDicFB(new_word));
         window.alert("단어가 수정되었습니다.")
         navigate("/");
     }

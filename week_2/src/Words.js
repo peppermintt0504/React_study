@@ -4,7 +4,7 @@ import {useDispatch, useSelector} from "react-redux";
 import { Route, Routes, useNavigate} from "react-router-dom";
 
 import {db} from "./firebase";
-import {deleteDicFB} from "./redux/modules/dict"
+import {deleteDicFB,checkDicFB} from "./redux/modules/dict"
 
 //아이콘 import
 import Fab from '@mui/material/Fab';
@@ -16,7 +16,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
 
-import { FaPlus } from "react-icons/fa";
+import { FaPlus,FaRegCheckCircle } from "react-icons/fa";
 
 import "./App.css"
 
@@ -26,13 +26,15 @@ function Words(props) {
     const dispatch = useDispatch();
     
     const data = useSelector((state) => state.dict.list);
-    console.log(useSelector((state) => state));
-    console.log(data);
 
     const delete_word = (word_id) =>{
         dispatch(deleteDicFB(word_id));
         window.alert("삭제되었습니다.")
     };
+
+    const check_word = (word_id) =>{
+        dispatch(checkDicFB(word_id));
+    }
 
     return (
 
@@ -41,10 +43,12 @@ function Words(props) {
         {data.map((val,index,da) => {
 
             return (
-                    <Card key = {index}>
-                        <Check><CheckCircleOutlineIcon/></Check>
-                        <Rectify onClick={()=> navigate("/writing/"+ val.id)}><BorderColorOutlinedIcon/></Rectify>
-                        <Delete onClick={()=>( delete_word(val.id))}><DeleteOutlineIcon/></Delete>
+                    <Card check={val.check} key = {index}>
+                        <div>
+                            <Check><FaRegCheckCircle onClick={()=>(check_word(val.id))}  fontSize="20px"/></Check>
+                            <Rectify onClick={()=> navigate("/writing/"+ val.id)}><BorderColorOutlinedIcon/></Rectify>
+                            <Delete onClick={()=>(delete_word(val.id))}><DeleteOutlineIcon/></Delete>
+                        </div>
                         <h1>{val.word}</h1>
                         <h2>{val.pron}</h2>
                         <h3>{val.mean}</h3>
@@ -74,12 +78,15 @@ const Card = styled.div`
     width : calc(( 100% - 146px )/3);
     margin : 0;
     padding : 20px;
-    background-color : #a1afff3b;
+    background-color : ${(props)=>(props.check ? "#a1afffff" : "#a1afff3b")};
     border : 1px solid #8b84d4b5;
     border-radius : 10px;
     text-align:left;
     position : relative;
     
+    & div{
+        color : ${(props)=>(props.check ? "#fff" : "#a1afffff")};
+    }
 
     & h1{
         font-size : 20px;

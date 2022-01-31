@@ -10,17 +10,19 @@ import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 
 import "./App.css"
-import { SnowshoeingOutlined } from "@mui/icons-material";
-import { type } from "@testing-library/user-event/dist/type";
+
+
 
 function Writing(props){
     const params = useParams();
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const word_id = params.id;
-    const count = 0
 
     const data = useSelector((state) => state.dict.list);
+    const my_lists = useSelector((state) => state.dict.list).filter((l) => l.id === word_id)[0];
+    
+    console.log(my_lists);
 
     const word = React.useRef(null);
     const pron = React.useRef(null);
@@ -52,7 +54,7 @@ function Writing(props){
                         mean : mean.current.value,
                         exam : exam.current.value,
                         interpretation: inter.current.value,
-                        check : true};
+                        check : false};
         
         dispatch(createDicFB(new_word));
         window.alert("단어가 추가되었습니다.")
@@ -79,7 +81,7 @@ function Writing(props){
         <Box>
             {props.post_type === 'create'?<h1>단어 추가하기</h1>:<h1>단어 수정하기</h1>}
             <p>단어</p>
-            {word_data?<input type="text" ref = {word} defaultValue={word_data.word}></input>:<input type="text" ref = {word}></input>}
+            <input type="text" ref = {word} defaultValue={word_data?word_data.word:null}></input>
             <p>발음</p>
             {word_data?<input type="text" ref = {pron} defaultValue={word_data.pron}></input>:<input type="text" ref = {pron}></input>}
             <p>의미</p>
@@ -104,7 +106,7 @@ function Writing(props){
 const Box = styled.div`
     width : 30vw;
     height : 500px;
-    background-color : pink;
+    background-color : #a1afff3b;
     margin : auto;
     text-align: left;
     padding : 20px;

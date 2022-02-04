@@ -21,10 +21,6 @@ const Post = (props) =>{
                 <Grid padding = "16px" >
                     <Text bold>댓글 {props.comment_cnt}개</Text>
                 </Grid>
-                <div>user profile / user name / insert_dt </div>
-                <div>contents</div>
-                <div>image</div>
-                <div>comment cnt</div>
             </Grid>
         </React.Fragment>
     )

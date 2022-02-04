@@ -3,12 +3,16 @@ import styled from "styled-components";
 import { Button, Grid, Input, Text } from "../elements";
 import { getCookie,deleteCookie,setCookie } from "../shared/Cookie";
 
-import Header from "../components/Header.js"
 
+import { useDispatch } from "react-redux";
+import {actionCreators as userAction} from "../redux/modules/user"
+import { emailCheck } from "../shared/common";
 
 const Login = (props) => {
     const [id, setId] = React.useState('');
     const [pwd, setPwd] = React.useState('');
+
+    const dispatch = useDispatch();
 
     const changeId = (e) => {
         setId(e.target.value);
@@ -19,15 +23,22 @@ const Login = (props) => {
     }
 
     const login = () => {
-        console.log(id,pwd)
-        setCookie("user_id", id, 3);
-        setCookie("user_pwd", pwd, 3);
-        console.log(document.cookie);
-        console.log(getCookie("user_id"))
+        if(id === "" || pwd === ""){
+            window.alert("정보를 입력하세요.");
+            return;
+        }
+
+        if(!emailCheck(id)){
+            window.alert("이메일 형식이 맞지 않습니다!");
+            return;
+        }
+        
+        dispatch(userAction.loginFB(id,pwd));
+
     }
     return (
         <React.Fragment>
-            <Header></Header>
+            
             <Grid padding="16px">
                 <Text size="32px" bold>로그인</Text>
 
@@ -41,6 +52,7 @@ const Login = (props) => {
 
                 <Grid padding="16px 0px">
                     <Input
+                        type = "password"
                         label="패스워드"
                         placeholder="패스워드 입력해주세요."
                         _onChange={changePwd}

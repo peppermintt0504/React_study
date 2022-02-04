@@ -2,32 +2,59 @@ import React from 'react';
 
 
 //Route
-import { Route} from 'react-router-dom'
-import { ConnectedRouter } from "connected-react-router"
+import { BrowserRouter,Route} from 'react-router-dom'
+import { Brower ,ConnectedRouter } from "connected-react-router"
 import { history } from '../redux/configureStore';
+
+//pages
 import PostList from '../pages/PostList';
 import Login from '../pages/Login';
 import Signup from '../pages/Signup';
+import Detail from '../pages/Detail';
+import PostWrite from '../pages/PostWrite';
+
 
 import Header from '../components/Header';
 import { Button, Grid, Input, Text } from "../elements";
 
 import './App.css';
 
+import { useDispatch } from "react-redux";
 
+import {actionCreators as userAction} from "../redux/modules/user"
+
+import {apiKey} from "./firebase";
+
+import Permit from "./Permit";
 
 function App() {
+  const dispatch = useDispatch();
+  const _session_key = `firebase:authUser:${apiKey}:[DEFAULT]`
+  const is_session = sessionStorage.getItem(_session_key)?true:false;
+
+  React.useEffect(()=>{
+
+    if(is_session){
+      dispatch(userAction.loginCheckFB())
+    }
+  })
+
   return (
     <React.Fragment>
       <Grid>
         <Header></Header>
         
-        
+        <ConnectedRouter history={history}>
           <Route path="/" exact component={PostList} />
           <Route path="/login" exact component={Login} />
           <Route path="/signup" exact component={Signup}/>
+          <Route path="/detail" exact component={Detail}/>
+          <Route path="/postwrite" exact component={PostWrite}/>
+        </ConnectedRouter>
 
-       
+        <Permit>
+          <Button is_float = "ture" text = "+">+</Button>
+        </Permit>
       </Grid>
     </React.Fragment>
   );

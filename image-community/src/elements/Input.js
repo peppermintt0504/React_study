@@ -3,25 +3,33 @@ import styled from "styled-components";
 
 const Input = (props) => {
 
-    const {label,value, _onChange, placeholder,border_color} = props;
+    const {width,height, type, label, value, _onChange, placeholder,border_color} = props;
+    const styles ={
+        width : width,
+        height : height,
+        border_color : border_color,
+    }
 
     return (
         <div>
 
             <P>{label}</P>
             <Wrap>
-            <In onChange = {_onChange} placeholder = {placeholder}></In>
+            <In {...styles} type = {type} onChange = {_onChange} placeholder = {placeholder}></In>
             </Wrap>
         </div>
     );
 }
 
-Text.defaultProps ={
+Input.defaultProps ={
     label : false,
     value : false,
     onChange : false,
     placeholder : false,
-    border_color : "black",
+    border_color : "gray",
+    type : "text",
+    width : "100%",
+    height : "40px",
 
 };
 
@@ -35,9 +43,9 @@ const Wrap = styled.div`
 const In = styled.input`
     border : ${(props)=> props.border_color} 1.5px solid;
     justify-content : center; 
-    height : 35px;
+    height : ${(props) => props.height};
+    width : ${(props) => props.width};
     margin : auto;
-    width : 100%;
 `;
 const P = styled.div`
     font-size : 12px;

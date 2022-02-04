@@ -3,7 +3,6 @@ import styled from "styled-components";
 
 
 const Button = (props) => {
-    console.log(props)
     const {color,text, _onClick, background_color,children} = props;
     const sytles = {
         color : color,

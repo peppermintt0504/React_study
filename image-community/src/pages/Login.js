@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Button, Grid, Input, Text } from "../elements";
 import { getCookie,deleteCookie,setCookie } from "../shared/Cookie";
 
-import Header from "../shared/Header.js"
+import Header from "../components/Header.js"
 
 
 const Login = (props) => {
@@ -12,7 +12,6 @@ const Login = (props) => {
 
     const changeId = (e) => {
         setId(e.target.value);
-        console.log(id);
     }
 
     const changePwd = (e) => {
@@ -20,9 +19,11 @@ const Login = (props) => {
     }
 
     const login = () => {
-    
+        console.log(id,pwd)
         setCookie("user_id", id, 3);
         setCookie("user_pwd", pwd, 3);
+        console.log(document.cookie);
+        console.log(getCookie("user_id"))
     }
     return (
         <React.Fragment>
@@ -34,9 +35,7 @@ const Login = (props) => {
                     <Input
                         label="아이디"
                         placeholder="아이디를 입력해주세요."
-                        _onChange={() => {
-                        console.log("아이디 입력했어!");
-                        }}
+                        _onChange={changeId}
                     />
                 </Grid>
 
@@ -44,16 +43,14 @@ const Login = (props) => {
                     <Input
                         label="패스워드"
                         placeholder="패스워드 입력해주세요."
-                        _onChange={() => {
-                        console.log("패스워드 입력했어!");
-                        }}
+                        _onChange={changePwd}
                     />
                 </Grid>
 
                 <Button
                 text="로그인하기"
                 _onClick={() => {
-                    console.log("로그인 했어!");
+                    login();
                 }}
                 >로그인하기</Button>
             </Grid>

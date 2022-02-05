@@ -41,7 +41,7 @@ const signupFB = (id,pwd,name)=>{
             }).then(() => {
                 dispatch(setUser({
                     user_name : name,
-                    id : id,
+                    id : userCredential.user.email,
                     user_profile : "",
                     uid : userCredential.user.uid,}));
                 history.push("/");
@@ -71,10 +71,10 @@ const loginFB = (id,pwd) =>{
             signInWithEmailAndPassword(auth, id, pwd)
             .then((userCredential) => {
                 // Signed in
-                console.log(userCredential)
+                
                 dispatch(setUser({
                                 user_name : userCredential.user.displayName,
-                                id : id,
+                                id : userCredential.user.email,
                                 user_profile : "",
                                 uid : userCredential.user.uid,}));
                 history.push("/");
@@ -93,9 +93,10 @@ const loginCheckFB = () =>{
     return function(dispatch,getState,{history}){
         onAuthStateChanged(auth, (user) => {
             if (user) {
+                
                 dispatch(setUser({
                     user_name : user.displayName,
-                    id : user.id,
+                    id : user.email,
                     user_profile : "",
                     uid : user.uid,}));
             
@@ -122,6 +123,7 @@ export default handleActions(
         [SET_USER]: (state, action) =>
         produce(state, (draft) => {
             setCookie("is_login", "success");
+            
             draft.user = action.payload.user;
             draft.is_login = true;
         }),

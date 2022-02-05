@@ -7,9 +7,11 @@ import {actionCreators as postAction} from "../redux/modules/post"
 
 const PostWrite = (props) => {
     
-    const is_login = useSelector((state) => state.user.is_login);
     const {history} = props;
     const dispatch = useDispatch();
+
+    const is_login = useSelector((state) => state.user.is_login);
+    const preview = useSelector((state) => state.image.preview);
 
     const [contents,setContents] = React.useState('');
     const changeContents = (e) =>{
@@ -17,7 +19,6 @@ const PostWrite = (props) => {
     }
 
     const addPost = () =>{
-        console.log(contents)
         dispatch(postAction.addPostFB(contents));
         window.alert("게시물이 작성되었습니다.");
     }
@@ -49,7 +50,7 @@ const PostWrite = (props) => {
                 </Text>
             </Grid>
 
-            <Image shape="rectangle" />
+            <Image shape="rectangle" src={preview?preview:"http://via.placeholder.com/400x300"}/>
             </Grid>
 
             <Grid padding="16px">

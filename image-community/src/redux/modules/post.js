@@ -1,6 +1,8 @@
 import { createAction, handleActions } from "redux-actions";
 import { produce } from "immer";
 
+import { storage } from "../../shared/firebase";
+
 import {db} from "../../shared/firebase"
 import {   collection,
     doc,
@@ -9,6 +11,10 @@ import {   collection,
     addDoc,
     updateDoc,
     deleteDoc,} from "firebase/firestore";
+
+import { getDownloadURL, ref, uploadString } from "firebase/storage";
+import { actionCreators as imageActions } from "./image";
+
 
 import moment from 'moment';
 
@@ -28,12 +34,13 @@ const initialState = {
     list : [],
 
 };
+
 const initialPost = {
     user_info:{
         user_name : "dong",
         user_profile : "https://thumb.mt.co.kr/06/2021/03/2021030521582049015_1.jpg/dims/optimize/"
     },
-    user_url : "https://thumb.mt.co.kr/06/2021/03/2021030521582049015_1.jpg/dims/optimize/",
+    image_url : "https://thumb.mt.co.kr/06/2021/03/2021030521582049015_1.jpg/dims/optimize/",
     contents : "안녕아녕",
     comment_cnt : 3420,
     insert_dt : "2021-02-27 10:00:00",
@@ -66,29 +73,43 @@ const addPostFB = (contents = "") =>{
         const insert_dt = moment().format("YYYY-MM-DD hh:mm:ss");
         const _user = getState().user.user;
 
+        
+
+        const _image = getState().image.preview;
+        const storageRef = await ref(storage,`image/${_user.id}_${new Date().getTime()}`)
+        const userRef = await collection(db, "post_community")
+
+        await uploadString(storageRef, _image, 'data_url')
+        const url = await getDownloadURL(storageRef)
+
+
         const _post = {
             ...initialPost,
+            image_url : url,
             contents : contents,
             insert_dt : insert_dt,
             user_info : {
+                user_id : _user.id,
                 user_name : _user.user_name,
                 user_profile : _user.user_profile,
             }
-        }
-        
-        const docRef = await addDoc(collection(db, "post_community"),_post);
-        _post.user_info = {..._post.user_info , user_id : docRef.id};
-        console.log(_post);
+        };
+        const docRef = await addDoc(userRef,_post);
+        const temp =await getDoc(docRef);
+
+        _post.id = temp.id;
+
+        dispatch(imageActions.setPreview(null));
         dispatch(addPost(_post))
         history.push("/");
-        
-        
-
-
     }
-
 }
 
+const fileUploadFB = () =>{
+    return function (dispatch, getState, {history}){
+        
+    }
+}
 
 
 
@@ -104,6 +125,7 @@ export default handleActions(
         }),
         [ADD_POST]: (state,action)=>
         produce(state,(draft)=>{
+            console.log(draft.list)
             console.log(action.payload.post);
             draft.list.unshift(action.payload.post)
         })

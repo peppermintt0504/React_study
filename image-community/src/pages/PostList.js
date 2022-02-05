@@ -23,6 +23,7 @@ const PostList = (props) =>{
         <React.Fragment>
             {/* <Post/> */}
             {post_list.map((v,i) =>{
+                console.log(v.id);
                 return <Post key={v.id} {...v}/>
             })}
         </React.Fragment>

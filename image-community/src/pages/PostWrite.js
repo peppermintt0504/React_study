@@ -3,15 +3,23 @@ import {Grid, Text, Button, Image, Input} from "../elements";
 import Upload from "../shared/Upload";
 
 import { useSelector, useDispatch } from "react-redux";
+import {actionCreators as postAction} from "../redux/modules/post"
 
 const PostWrite = (props) => {
+    
     const is_login = useSelector((state) => state.user.is_login);
     const {history} = props;
+    const dispatch = useDispatch();
 
     const [contents,setContents] = React.useState('');
     const changeContents = (e) =>{
         setContents(e.target.value);
-        console.log(contents);
+    }
+
+    const addPost = () =>{
+        console.log(contents)
+        dispatch(postAction.addPostFB(contents));
+        window.alert("게시물이 작성되었습니다.");
     }
 
 
@@ -49,7 +57,7 @@ const PostWrite = (props) => {
             </Grid>
 
             <Grid padding="16px">
-            <Button text="게시글 작성"></Button>
+            <Button _onClick={addPost} text="게시글 작성"></Button>
             </Grid>
         </React.Fragment>
     );

@@ -3,11 +3,23 @@ import styled from "styled-components";
 
 const Input = (props) => {
 
-    const {width,height, type, label, value, _onChange, placeholder,border_color} = props;
+    const {width,height, type, label, value, _onChange, placeholder,border_color,multiLine} = props;
     const styles ={
         width : width,
         height : height,
         border_color : border_color,
+    }
+    if(multiLine){
+        return (
+        <Wrap>
+            <P>{label}</P>
+            <ElTextarea
+            rows={10}
+            placeholder={placeholder}
+            onChange={_onChange}
+            ></ElTextarea>
+        </Wrap>
+        );
     }
 
     return (
@@ -35,7 +47,7 @@ Input.defaultProps ={
 
 const Wrap = styled.div`
     display : flex;
-    justify-content : center; 
+    /* justify-content : center;  */
     flex-wrap : wrap;
     align-items : center;
 `;
@@ -50,6 +62,18 @@ const In = styled.input`
 const P = styled.div`
     font-size : 12px;
     margin : 1px
+`;
+const ElInput = styled.input`
+    border: 1px solid #212121;
+    width: 100%;
+    padding: 12px 4px;
+    box-sizing: border-box;
+`;
+const ElTextarea = styled.textarea`
+    border: 1px solid #212121;
+    width: 100%;
+    padding: 12px 4px;
+    box-sizing: border-box;
 `;
 
 export default Input;

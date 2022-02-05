@@ -53,7 +53,7 @@ function App() {
         </ConnectedRouter>
 
         <Permit>
-          <Button is_float = "ture" text = "+">+</Button>
+          <Button _onClick={() => history.push("/postwrite")} is_float = "ture" text = "+">+</Button>
         </Permit>
       </Grid>
     </React.Fragment>

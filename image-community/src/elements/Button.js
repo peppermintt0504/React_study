@@ -4,12 +4,14 @@ import styled from "styled-components";
 
 const Button = (props) => {
     const {width, height, color, text, _onClick, background_color,is_float, children} = props;
+    
     const sytles = {
         color : color,
         background_color : background_color,
         height : height,
         width: width,
     }
+    
     
     if(is_float){
 
@@ -41,7 +43,8 @@ const Btn = styled.button`
     background-color : ${(props) => (props.background_color)};
     height : ${(props) => props.height};
     width : ${(props) => props.width};
-    color : ${(props) => props.color};
+    color : ${(props) => (props.color)};
+    
 
 
 `;

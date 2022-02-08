@@ -10,7 +10,8 @@ import {   collection,
     getDocs,
     addDoc,
     updateDoc,
-    deleteDoc,
+    arrayUnion,
+    arrayRemove,
     query, orderBy, limit,startAfter,} from "firebase/firestore";
 
 import { connectStorageEmulator, getDownloadURL, ref, uploadString } from "firebase/storage";
@@ -23,6 +24,7 @@ import moment from 'moment';
 const SET_POST = "SET_POST";
 const ADD_POST = "ADD_POST";
 const LOADING = "LOADING";
+const LIKE = "LIKE";
 
 
 //action creatos
@@ -30,6 +32,8 @@ const LOADING = "LOADING";
 const setPost = createAction(SET_POST, (post_list,paging) => ({ post_list ,paging}));
 const addPost = createAction(ADD_POST, (post) => ({ post }));
 const loading = createAction(LOADING, (is_loding) => ({ is_loding }));
+const like = createAction(LIKE, (index ,id) => ({ index, id }));
+
 
 
 //initialState
@@ -50,6 +54,7 @@ const initialPost = {
     contents : "안녕아녕",
     comment_cnt : 3420,
     insert_dt : "2021-02-27 10:00:00",
+    like : [],
 };
 
 //middleware actions
@@ -58,10 +63,11 @@ const getPostFB=(start = null, size = 2) =>{
         let _paging = getState().post.paging;
         if(_paging.start && !_paging.next)
             return;
+
         dispatch(loading(true));
+
         const postCol = collection(db, "post_community");
         let q = start? query(postCol, orderBy("insert_dt","desc"),startAfter(start), limit(size + 1)): query(postCol, orderBy("insert_dt","desc"), limit(size + 1))
-        console.log("start :", start);
         let post_list  = [];
         const documentSnapshots = await getDocs(q);
         
@@ -70,17 +76,16 @@ const getPostFB=(start = null, size = 2) =>{
             next : documentSnapshots.docs.length === size + 1? documentSnapshots.docs[documentSnapshots.docs.length -2] : null, 
             size : size,
         };
-        console.log("next : ", paging.next);
+
 
         documentSnapshots.forEach((b) => {  
             let _post = b.data();
             let post = Object.keys(_post).reduce((acc,v) => {
                 if(v.indexOf("user_") !== -1){
-                    return {...acc, user_info : {...acc.user_info, [v] : _post[v] }};
+                    return {...acc, [v] : _post[v]};
                 }
                 return {...acc, [v] : _post[v]};
             },{id:b.id, user_info : {}})
-
             post_list.push({ ...post });
         });
         post_list.pop();
@@ -93,8 +98,6 @@ const addPostFB = (contents = "") =>{
     return async function (dispatch,getState,{history}){
         const insert_dt = moment().format("YYYY-MM-DD hh:mm:ss");
         const _user = getState().user.user;
-
-        
 
         const _image = getState().image.preview;
         const storageRef = await ref(storage,`image/${_user.id}_${new Date().getTime()}`)
@@ -109,6 +112,7 @@ const addPostFB = (contents = "") =>{
             image_url : url,
             contents : contents,
             insert_dt : insert_dt,
+            like: [],
             user_info : {
                 user_id : _user.id,
                 user_name : _user.user_name,
@@ -126,9 +130,25 @@ const addPostFB = (contents = "") =>{
     }
 }
 
-const fileUploadFB = () =>{
+const likeFB = (post_id,user_id) =>{
     return function (dispatch, getState, {history}){
-        
+
+        const _post = getState().post.list.reduce((x,v,i)=> post_id===v.id?i:x,0);
+        const likePost = doc(db,"post_community",post_id);
+
+        if(getState().post.list[_post].like.includes(user_id)){
+            updateDoc(likePost,{like : arrayRemove(user_id)}).then(() =>{
+                dispatch(like(_post,user_id));
+            })
+        }else{
+            updateDoc(likePost,{like : arrayUnion(user_id)}).then(() =>{
+                dispatch(like(_post,user_id));
+            })
+        }
+
+
+
+
     }
 }
 
@@ -153,6 +173,13 @@ export default handleActions(
         produce(state,(draft)=>{
             draft.is_loding = action.payload.is_loding;
         }),
+        [LIKE] : (state,action) =>
+        produce(state,(draft)=>{
+            if(draft.list[action.payload.index].like.includes(action.payload.id))
+                draft.list[action.payload.index].like.pop(action.payload.id);
+            else
+                draft.list[action.payload.index].like.push(action.payload.id);
+        }),
     },
     initialState
 );
@@ -164,6 +191,8 @@ const actionCreators = {
     addPost,
     getPostFB,
     addPostFB,
+    likeFB,
+
 
 };
 

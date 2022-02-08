@@ -8,6 +8,8 @@ import InfinityScroll from "../shared/infinityScroll";
 
 import post, {actionCreators as postActions} from "../redux/modules/post";
 
+import { Grid } from "../elements";
+
 const PostList = (props) =>{
     
     const dispatch = useDispatch();
@@ -29,17 +31,17 @@ const PostList = (props) =>{
                 is_next = {paging.next}
                 loading = {is_loding}>
 
+            <Grid is_flex flex_direction="column">
+                {/* <Post/> */}
+                {post_list.map((v,i) =>{
+                    return <Post key={v.id} {...v}/>
+                })}
             
-            {/* <Post/> */}
-            {post_list.map((v,i) =>{
-                return <Post key={v.id} {...v}/>
-            })}
+            </Grid>
             </InfinityScroll>
         </React.Fragment>
     )
 }
-
-//Post conponent 기본 Props 지정
 
 
 export default PostList;

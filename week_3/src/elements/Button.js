@@ -18,7 +18,7 @@ const Button = (props) => {
     if(is_float){
 
         return(
-            <F_btn onClick={()=>_onClick()}>{text}</F_btn>
+            <F_btn onClick={()=>_onClick()}>{children}</F_btn>
         )
     }
 
@@ -59,13 +59,13 @@ const F_btn = styled.button`
     width : 50px;
     border : none;
     border-radius : 50px;
-    background-color : #d2dbf4;
-    color : gray;
+    background-color : white;
+    color : #d2dbf4;
     box-sizing :border-box;
-    font-size : 40px;
+    font-size : 50px;
     font-weight : 600;
     position : fixed;
-    right : 15px;
+    right : 30px;
     bottom : 40px;
     text-align : center;
     vertical-align : middle;

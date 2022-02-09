@@ -3,17 +3,20 @@ import styled from "styled-components";
 
 const Input = (props) => {
 
-    const {width,height, type, label, value, _onChange, placeholder,border_color,multiLine} = props;
+    const { B_radius,width,height, type, label, value, _onChange, placeholder,border_color,multiLine} = props;
     const styles ={
         width : width,
         height : height,
         border_color : border_color,
+        B_radius : B_radius,
+
     }
     if(multiLine){
         return (
         <Wrap>
             <P>{label}</P>
             <ElTextarea
+            value={value}
             rows={10}
             placeholder={placeholder}
             onChange={_onChange}
@@ -27,7 +30,7 @@ const Input = (props) => {
 
             <P>{label}</P>
             <Wrap>
-            <In {...styles} type = {type} onChange = {_onChange} placeholder = {placeholder}></In>
+            <In {...styles} value={value}  type = {type} onChange = {_onChange} placeholder = {placeholder}></In>
             </Wrap>
         </div>
     );
@@ -35,13 +38,13 @@ const Input = (props) => {
 
 Input.defaultProps ={
     label : false,
-    value : false,
     onChange : false,
     placeholder : false,
     border_color : "gray",
     type : "text",
     width : "100%",
     height : "40px",
+    B_radius : null,
 
 };
 
@@ -58,6 +61,7 @@ const In = styled.input`
     height : ${(props) => props.height};
     width : ${(props) => props.width};
     margin : auto;
+    border-radius : ${(props) => props.B_radius};
 `;
 const P = styled.div`
     font-size : 12px;

@@ -2,11 +2,10 @@
 import React from "react";
 import { useSelector,useDispatch } from "react-redux";
 
-
 import Post from "../components/Post";
 import InfinityScroll from "../shared/infinityScroll";
 
-import post, {actionCreators as postActions} from "../redux/modules/post";
+import {actionCreators as postActions} from "../redux/modules/post";
 
 import { Grid } from "../elements";
 
@@ -19,7 +18,7 @@ const PostList = (props) =>{
 
     
     React.useEffect(() =>{
-        if(post_list.length === 0 )dispatch(postActions.getPostFB());
+        if(post_list.length <= 1 )dispatch(postActions.getPostFB());
     }
     ,[])
 
@@ -34,7 +33,7 @@ const PostList = (props) =>{
             <Grid is_flex flex_direction="column">
                 {/* <Post/> */}
                 {post_list.map((v,i) =>{
-                    return <Post key={v.id} {...v}/>
+                    return <Post key={v.id} index={i} {...v}/>
                 })}
             
             </Grid>

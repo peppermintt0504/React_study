@@ -7,25 +7,21 @@ import { HiOutlineHeart,HiHeart } from "react-icons/hi";
 
 import {actionCreators as postActions} from "../redux/modules/post"
 
+import {history} from "../redux/configureStore"
 
 const Post = (props) =>{
     const user = useSelector((state) => state.user);
-    let user_id = false;
-    console.log(user);
-
-    if(user.is_login){
-        user_id = user.user.id;
-    }
-    
-    
     const dispatch = useDispatch();
+    let user_id = false;
 
+    if(user.is_login)
+        user_id = user.user.id;
     
+
     const like = (post_id,user_id)=>{
         if(!user_id)
             return;
-        console.log("pid :",post_id);
-        console.log("uid :",user_id);
+
         dispatch(postActions.likeFB(post_id,user_id))
 
     }
@@ -41,16 +37,17 @@ const Post = (props) =>{
                     <Text>{props.insert_dt}</Text>
                 </Grid>
                 <Grid is_flex padding = "16px">
-                    <Text>{props.contents}</Text>
-                
-                    <Image  src = {props.image_url} shape = "rectangle"></Image>
+                    {props.direction === "L"?<Text>{props.contents}</Text> : ""}
+                    <Image _onClick={() =>{history.push(`/detail/${props.id}`)}} src = {props.image_url} shape = "rectangle"></Image>
+                    {props.direction === "R"?<Text>{props.contents}</Text> : ""}
+                    
                 </Grid>
                 <Grid is_flex padding = "16px" >
                     <Grid is_flex justify_content="flex-start">
                     <Text margin="0 20px 0 0" bold>댓글 {props.comment_cnt}개</Text>
-                    <Text  bold>좋아요 {props.like.length}개</Text>
+                    <Text  bold>좋아요 {props.like?props.like.length:""}개</Text>
                     </Grid>
-                    <Text _onClick={() =>{like(props.id,user_id)}} color="black" size="30px">{props.like.indexOf(user_id)!==-1?<HiHeart/>:<HiOutlineHeart/>}</Text>
+                    <Text _onClick={() =>{like(props.id,user_id)}} color="black" size="30px">{props.like?props.like.indexOf(user_id)!==-1?<HiHeart/>:<HiOutlineHeart/>:""}</Text>
                 </Grid>
             </Grid>
         </React.Fragment>

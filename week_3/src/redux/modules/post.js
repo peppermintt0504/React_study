@@ -25,6 +25,8 @@ const SET_POST = "SET_POST";
 const ADD_POST = "ADD_POST";
 const LOADING = "LOADING";
 const LIKE = "LIKE";
+const ONE_POST = "ONE_POST";
+const ADDCOMMENT = "ADDCOMMENT";
 
 
 //action creatos
@@ -33,6 +35,8 @@ const setPost = createAction(SET_POST, (post_list,paging) => ({ post_list ,pagin
 const addPost = createAction(ADD_POST, (post) => ({ post }));
 const loading = createAction(LOADING, (is_loding) => ({ is_loding }));
 const like = createAction(LIKE, (index ,id) => ({ index, id }));
+const onePost = createAction(ONE_POST, (post) => ({ post }));
+const addComment = createAction(ADDCOMMENT,(post_id) => ({post_id}));
 
 
 
@@ -47,14 +51,17 @@ const initialState = {
 
 const initialPost = {
     user_info:{
-        user_name : "dong",
+        user_name : "null",
         user_profile : "https://thumb.mt.co.kr/06/2021/03/2021030521582049015_1.jpg/dims/optimize/"
     },
     image_url : "https://thumb.mt.co.kr/06/2021/03/2021030521582049015_1.jpg/dims/optimize/",
-    contents : "안녕아녕",
-    comment_cnt : 3420,
+    contents : "",
+    comment_cnt : 0,
     insert_dt : "2021-02-27 10:00:00",
     like : [],
+    direction : "R",
+
+    
 };
 
 //middleware actions
@@ -94,7 +101,7 @@ const getPostFB=(start = null, size = 2) =>{
     }
 }
 
-const addPostFB = (contents = "") =>{
+const addPostFB = (contents = "", direction= "R") =>{
     return async function (dispatch,getState,{history}){
         const insert_dt = moment().format("YYYY-MM-DD hh:mm:ss");
         const _user = getState().user.user;
@@ -113,7 +120,9 @@ const addPostFB = (contents = "") =>{
             contents : contents,
             insert_dt : insert_dt,
             like: [],
+            direction : direction,
             user_info : {
+                uid : _user.uid,
                 user_id : _user.id,
                 user_name : _user.user_name,
                 user_profile : _user.user_profile,
@@ -145,13 +154,25 @@ const likeFB = (post_id,user_id) =>{
                 dispatch(like(_post,user_id));
             })
         }
-
-
-
-
     }
 }
 
+const getOnePostFB = (id) => {
+    return async function(dispatch, getState, {history}){
+        const _post = doc(db,"post_community",id);
+        const temp =await getDoc(_post);
+        let Post = temp.data();
+
+        dispatch(onePost({...Post, id:temp.id}));   
+    }
+}
+
+const addCommentFB = (post_id) =>{
+    return async function(dispatch, getState, {history}){
+        dispatch(addComment(post_id));
+
+    }
+}
 
 
 
@@ -180,6 +201,19 @@ export default handleActions(
             else
                 draft.list[action.payload.index].like.push(action.payload.id);
         }),
+        [ONE_POST] : (state,action) =>
+        produce(state,(draft)=>{
+            
+            draft.list.push(action.payload.post);
+            
+        }),
+        [ADDCOMMENT] : (state,action) =>
+        produce(state,(draft)=>{
+            
+            let index = state.list.reduce((x,v,i) => v.id===action.payload.post_id?i:x ,null);
+            draft.list[index].comment_cnt += 1;
+            
+        }),
     },
     initialState
 );
@@ -192,6 +226,8 @@ const actionCreators = {
     getPostFB,
     addPostFB,
     likeFB,
+    getOnePostFB,
+    addCommentFB,
 
 
 };

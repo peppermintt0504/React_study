@@ -1,3 +1,22 @@
+@font-face {
+  font-family: "Mochiy";
+  src: url("./fonts/MochiyPopPOne-Regular.ttf");
+}
+@font-face {
+  font-family: "GamjaFlower";
+  src: url("./fonts/GamjaFlower-Regular.ttf");
+}
+@font-face {
+  font-family: "PoorStory";
+  src: url("./fonts/PoorStory-Regular.ttf");
+}
+
+*{
+  
+  font-family: "PoorStory";
+}
+
+
 .App {
   text-align: center;
 }

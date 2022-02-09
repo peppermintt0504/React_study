@@ -16,12 +16,15 @@ const PostWrite = (props) => {
     const preview = useSelector((state) => state.image.preview);
 
     const [contents,setContents] = React.useState('');
+    const [direction,setDirection] = React.useState('R');
+    
+
     const changeContents = (e) =>{
         setContents(e.target.value);
     }
 
     const addPost = () =>{
-        dispatch(postAction.addPostFB(contents));
+        dispatch(postAction.addPostFB(contents,direction));
         window.alert("게시물이 작성되었습니다.");
     }
 
@@ -42,6 +45,14 @@ const PostWrite = (props) => {
                 <Grid  padding="16px">
                 <Text margin="20px 0" size="36px" bold> 게시글 작성</Text>
                 <Upload/>
+                </Grid>
+                <Grid padding="16px">
+                <Text>게시물 방향</Text>
+                <select onChange={(e) => 
+                    setDirection(e.target.value==="오른쪽"?"R":"L")}>
+                    <option value={"오른쪽"}>오른쪽</option>
+                    <option value={"왼쪽"}>왼쪽</option>
+                </select>
                 </Grid>
 
                 <Grid>

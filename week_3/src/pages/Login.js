@@ -47,6 +47,7 @@ const Login = (props) => {
                         label="아이디"
                         placeholder="아이디를 입력해주세요."
                         _onChange={changeId}
+                        
                     />
                 </Grid>
 
@@ -56,6 +57,7 @@ const Login = (props) => {
                         label="패스워드"
                         placeholder="패스워드 입력해주세요."
                         _onChange={changePwd}
+                        
                     />
                 </Grid>
 

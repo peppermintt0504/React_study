@@ -27,6 +27,8 @@ import {apiKey} from "./firebase";
 
 import Permit from "./Permit";
 
+import { AiFillPlusCircle } from "react-icons/ai";
+
 function App() {
   const dispatch = useDispatch();
   const _session_key = `firebase:authUser:${apiKey}:[DEFAULT]`
@@ -48,13 +50,13 @@ function App() {
           <Route path="/" exact component={PostList} />
           <Route path="/login" exact component={Login} />
           <Route path="/signup" exact component={Signup}/>
-          <Route path="/detail" exact component={Detail}/>
+          <Route path="/detail/:id" exact component={Detail}/>
           <Route path="/postwrite" exact component={PostWrite}/>
           <Route path="/noti" exact component={Notification} />
         </ConnectedRouter>
 
         <Permit>
-          <Button _onClick={() => history.push("/postwrite")} is_float text = "+">+</Button>
+          <Button _onClick={() => history.push("/postwrite")} is_float text = "+"><AiFillPlusCircle/></Button>
         </Permit>
       </Grid>
     </React.Fragment>

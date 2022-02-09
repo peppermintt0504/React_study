@@ -12,7 +12,7 @@ const Notification = (props) => {
 
     return (
         <React.Fragment>
-            <Grid padding="16px" bg="#EFF6FF">
+            <Grid padding="20px 30%" bg="#EFF6FF">
             {noti.map((n) => {
                 return <Card {...n} key={n.post_id} />;
             })}

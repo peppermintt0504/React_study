@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import React from "react";
 
 const Image = (props) => {
-    const {shape, src, size} = props;
+    const {_onClick,shape, src, size} = props;
 
     const styles = {
         src: src,
@@ -11,21 +11,21 @@ const Image = (props) => {
 
     if(shape === "circle"){
         return (
-            <ImageCircle {...styles}></ImageCircle>
+            <ImageCircle onClick={_onClick} {...styles}></ImageCircle>
         )
     }
 
     if(shape === "rectangle"){
         return (
             <AspectOutter>
-                <AspectInner {...styles}></AspectInner>
+                <AspectInner onClick={_onClick} {...styles}></AspectInner>
             </AspectOutter>
         )
     }
 
     return (
         <React.Fragment>
-            <ImageDefault {...styles}></ImageDefault>
+            <ImageDefault onClick={_onClick} {...styles}></ImageDefault>
         </React.Fragment>
     )
 }

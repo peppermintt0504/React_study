@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 const Grid = (props) => {
 
-    const { B_left, B_right ,flex_direction, justify_content,is_flex,width,margin, padding, BG_c, children,center} = props;
+    const { _onClick, B_left, B_right ,flex_direction, justify_content,is_flex,width,margin, padding, BG_c, children,center} = props;
     const styles = {
         is_flex : is_flex,
         flex_direction: flex_direction ,
@@ -21,7 +21,7 @@ const Grid = (props) => {
 
     return(
         <React.Fragment>
-            <GridBox {...styles}>
+            <GridBox onClick={_onClick} {...styles}>
                 {children}
             </GridBox>
         </React.Fragment>
@@ -29,6 +29,7 @@ const Grid = (props) => {
 }
 
 Grid.defaultProps ={
+    _onClick : null,
     children : null,
     is_flex :false,
     width : "100%",

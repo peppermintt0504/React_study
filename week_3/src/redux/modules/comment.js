@@ -3,9 +3,9 @@ import { produce } from "immer";
 import { db, realtime } from "../../shared/firebase";
 import "moment";
 import moment from "moment";
-import { collection,query,where, getDocs, addDoc,doc, updateDoc,increment,  } from "firebase/firestore";
-import { update, ref } from "firebase/database";
-import { orderBy } from "lodash";
+import { collection,query,where, getDocs, addDoc,doc, updateDoc,increment, orderBy  } from "firebase/firestore";
+import { update, ref, set, push  } from "firebase/database";
+
 
 import { actionCreators as postActions } from "./post";
 
@@ -30,7 +30,10 @@ const addCommentFB =(post_id, contents) =>{
         const post = doc(db,"post_community",post_id);
         const user_info = getState().user.user;
         const post_info = getState().post.list;
-        const post_uid = post_info.reduce((x,v,i) => v.id === post_id?v:x,"").user_info.uid;
+        const __post = post_info.reduce((x,v,i) => v.id === post_id?v:x,"");
+        const post_uid = __post.user_info.uid;
+
+        console.log(__post);
 
         let comment = {
             post_id : post_id,
@@ -43,20 +46,43 @@ const addCommentFB =(post_id, contents) =>{
         }
         
         await addDoc(commentDB,comment);
-        await updateDoc(post,{comment_cnt : increment(1) })
+        const post_data = await updateDoc(post,{comment_cnt : increment(1) })
 
 
         dispatch(addComment(post_id,comment));
         dispatch(postActions.addCommentFB(post_id));
 
+
         if(user_info.uid === post_uid){
             return;
         }
-        const notiRef = ref(realtime, 'noti/' + post_uid);
-        await update(notiRef,{read: false});
+        
+        const noti_item = push(ref(realtime, 'noti/' + post_uid + "/list"));
+        
+        set(noti_item,{
+            post_id : post_id,
+            user_name : user_info.user_name,
+            image_url : __post.image_url,
+            insert_dt : comment.insert_dt,
+        }).then(() =>{
+            const notiRef = ref(realtime, 'noti/' + post_uid);
+            update(notiRef,{read:false});
+        });
+        
         
     }
 }
+
+const checkNoti =() =>{
+    return async function(dispatch, getState, {history}){
+        const user_info = getState().user.user;
+
+        const notiRef = ref(realtime, 'noti/' + user_info.uid);
+        await update(notiRef,{read:true});
+    }
+}
+
+
 
 const getCommentFB = (post_id = null) => {
     return async function(dispatch, getState, {history}){
@@ -65,7 +91,7 @@ const getCommentFB = (post_id = null) => {
         console.log("pass")
         const commentDB = collection(db,"comment");
 
-        const q = query(commentDB, where("post_id", "==", post_id));
+        const q = query(commentDB, where("post_id", "==", post_id) , orderBy("insert_dt","desc"));
         //const _query = query(commentDB, orderBy("insert_dt","desc"), where("post_id", "==", post_id))
         const hey = await getDocs(q);
         const list = [];
@@ -101,6 +127,8 @@ const actionCreators = {
     setComment,
     addComment,
     addCommentFB,
+    checkNoti,
+
 };
 
 export { actionCreators };

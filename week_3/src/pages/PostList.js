@@ -33,7 +33,7 @@ const PostList = (props) =>{
             <Grid is_flex flex_direction="column">
                 {/* <Post/> */}
                 {post_list.map((v,i) =>{
-                    return <Post key={v.id} index={i} {...v}/>
+                    return <Post key={v.id+i} index={i} {...v}/>
                 })}
             
             </Grid>

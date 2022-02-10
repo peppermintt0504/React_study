@@ -20,10 +20,8 @@ const Header = (props) => {
     const is_session = sessionStorage.getItem(_session_key)?true:false;
 
     const alt = () =>{
-
         dispatch(commentAction.checkNoti());
         history.push("/noti")
-
     }
 
 
@@ -33,7 +31,7 @@ const Header = (props) => {
             <React.Fragment>
                 <Grid BG_c="#d2dbf4" is_flex padding="4px 16px">
                     <Grid>
-                        <Text font_style={"italic"} _onClick= {() => history.push("/")} margin="0px" size="30px" bold>IDontKnowWhatToCallThisSite</Text>
+                        <Text cursor={"pointer"} font_style={"italic"} _onClick= {() => history.push("/")} margin="0px" size="30px" bold>IDontKnowWhatToCallThisSite</Text>
                     </Grid>
 
                     <Grid justify_content="space-around" is_flex>

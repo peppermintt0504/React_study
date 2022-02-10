@@ -12,6 +12,7 @@ import {   collection,
     updateDoc,
     arrayUnion,
     arrayRemove,
+    deleteDoc,
     query, orderBy, limit,startAfter,} from "firebase/firestore";
 
 import { connectStorageEmulator, getDownloadURL, ref, uploadString } from "firebase/storage";
@@ -23,6 +24,8 @@ import moment from 'moment';
 //action
 const SET_POST = "SET_POST";
 const ADD_POST = "ADD_POST";
+const DEL_POST = "DEL_POST";
+const EDIT_POST = "EDIT_POST";
 const LOADING = "LOADING";
 const LIKE = "LIKE";
 const ONE_POST = "ONE_POST";
@@ -33,6 +36,8 @@ const ADDCOMMENT = "ADDCOMMENT";
 
 const setPost = createAction(SET_POST, (post_list,paging) => ({ post_list ,paging}));
 const addPost = createAction(ADD_POST, (post) => ({ post }));
+const delPost = createAction(DEL_POST, (post_id) => ({ post_id }));
+const editPost = createAction(EDIT_POST, (post_id,post) => ({ post_id,post }));
 const loading = createAction(LOADING, (is_loding) => ({ is_loding }));
 const like = createAction(LIKE, (index ,id) => ({ index, id }));
 const onePost = createAction(ONE_POST, (post) => ({ post }));
@@ -139,6 +144,31 @@ const addPostFB = (contents = "", direction= "R") =>{
     }
 }
 
+
+const deletePostFB = (post_id) =>{
+    return async function (dispatch, getState, {history}){
+        const postRef = await doc(db, "post_community",post_id);
+        const docRef = await deleteDoc(postRef);   
+        dispatch(delPost(post_id));
+    }
+}
+
+const editPostFB = (post_id,content,direction) =>{
+    return async function (dispatch, getState, {history}){
+        console.log(post_id,content,direction)
+        const postRef = doc(db, "post_community",post_id);
+        const docRef = await updateDoc(postRef,{
+            contents : content,
+            direction : direction,
+            id:post_id
+        });
+        const getD = await getDoc(postRef);
+
+        dispatch(editPost(post_id,getD.data()));
+        history.push('/');
+    }
+}
+
 const likeFB = (post_id,user_id) =>{
     return function (dispatch, getState, {history}){
 
@@ -170,7 +200,6 @@ const getOnePostFB = (id) => {
 const addCommentFB = (post_id) =>{
     return async function(dispatch, getState, {history}){
         dispatch(addComment(post_id));
-
     }
 }
 
@@ -203,9 +232,7 @@ export default handleActions(
         }),
         [ONE_POST] : (state,action) =>
         produce(state,(draft)=>{
-            
             draft.list.push(action.payload.post);
-            
         }),
         [ADDCOMMENT] : (state,action) =>
         produce(state,(draft)=>{
@@ -213,6 +240,15 @@ export default handleActions(
             let index = state.list.reduce((x,v,i) => v.id===action.payload.post_id?i:x ,null);
             draft.list[index].comment_cnt += 1;
             
+        }),
+        [DEL_POST] : (state,action) =>
+        produce(state,(draft)=>{
+            draft.list = state.list.filter((v,i) => v.id===action.payload.post_id?false:true);
+        }),
+        [EDIT_POST] : (state,action) =>
+        produce(state,(draft)=>{
+            draft.list = state.list.map((v,i) => v.id===action.payload.post_id?action.payload.post:v);
+
         }),
     },
     initialState
@@ -228,6 +264,8 @@ const actionCreators = {
     likeFB,
     getOnePostFB,
     addCommentFB,
+    deletePostFB,
+    editPostFB,
 
 
 };

@@ -17,14 +17,13 @@ const Detail = (props) =>{
     const dispatch = useDispatch();
     const post_list = useSelector((state) => state.post.list);
     const paging = useSelector((state) => state.post.paging);
-
-    const this_post = post_list.reduce((x,v,i) => v.id===params.id?v:x ,0)
+    const this_post = post_list.reduce((x,v,i) => v.id===params.id?v:x ,0);
 
     React.useEffect(() =>{
         if(post_list.length===0)
             dispatch(postActions.getOnePostFB(params.id));
     }
-    ,[])
+    ,[]);
 
     return(
         <React.Fragment>

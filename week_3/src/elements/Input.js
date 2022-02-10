@@ -1,9 +1,10 @@
-import React from "react";
+import { child } from "firebase/database";
+import React, { Children } from "react";
 import styled from "styled-components";
 
 const Input = (props) => {
 
-    const { B_radius,width,height, type, label, value, _onChange, placeholder,border_color,multiLine} = props;
+    const {  _defaultValue, _ref, B_radius,width,height, type, label, value, _onChange, placeholder,border_color,multiLine,children} = props;
     const styles ={
         width : width,
         height : height,
@@ -11,6 +12,7 @@ const Input = (props) => {
         B_radius : B_radius,
 
     }
+    
     if(multiLine){
         return (
         <Wrap>
@@ -20,6 +22,7 @@ const Input = (props) => {
             rows={10}
             placeholder={placeholder}
             onChange={_onChange}
+            defaultValue={_defaultValue}
             ></ElTextarea>
         </Wrap>
         );
@@ -30,7 +33,7 @@ const Input = (props) => {
 
             <P>{label}</P>
             <Wrap>
-            <In {...styles} value={value}  type = {type} onChange = {_onChange} placeholder = {placeholder}></In>
+                <In defaultValue={_defaultValue} ref={_ref} {...styles} value={value} type = {type} onChange = {_onChange} placeholder = {placeholder}></In>
             </Wrap>
         </div>
     );
@@ -39,7 +42,7 @@ const Input = (props) => {
 Input.defaultProps ={
     label : false,
     onChange : false,
-    placeholder : false,
+    placeholder : null,
     border_color : "gray",
     type : "text",
     width : "100%",

@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector ,useDispatch} from "react-redux";
 
 
-import {Grid,Image,Text} from "../elements"
+import {Button, Grid,Image,Text} from "../elements"
 import { HiOutlineHeart,HiHeart } from "react-icons/hi";
 
 import {actionCreators as postActions} from "../redux/modules/post"
@@ -12,20 +12,40 @@ import {history} from "../redux/configureStore"
 const Post = (props) =>{
     const user = useSelector((state) => state.user);
     const dispatch = useDispatch();
-    let user_id = false;
+    
+    let user_id = null;
+    let user_uid = null;
 
-    if(user.is_login)
+    let is_mine = false;
+
+
+    if(user.is_login){
         user_id = user.user.id;
+        user_uid =user.user.uid;
+    }
+        
+
+    if(user_uid === props.user_info.uid){
+        is_mine = true;
+    }
     
 
     const like = (post_id,user_id)=>{
         if(!user_id)
             return;
-
         dispatch(postActions.likeFB(post_id,user_id))
-
     }
-
+    const deletePost = (post_id)=>{
+        if(!post_id)
+            return;
+        console.log(post_id)
+        dispatch(postActions.deletePostFB(post_id))
+    }
+    const editPost = (post_id)=>{
+        if(!post_id)
+            return;
+        history.push(`/postedit/${props.id}`)
+    }
     return(
         <React.Fragment>
             <Grid padding="0 15px" B_left="1px solid #80808055" B_right="1px solid #80808055" width="70%" height="40%">
@@ -34,14 +54,24 @@ const Post = (props) =>{
                     <Image src = {props.src} shape = "circle"></Image>
                     <Text bold>{props.user_info.user_name}</Text>
                     </Grid>
-                    <Text>{props.insert_dt}</Text>
-                </Grid>
-                <Grid is_flex padding = "16px">
-                    {props.direction === "L"?<Text>{props.contents}</Text> : ""}
-                    <Image _onClick={() =>{history.push(`/detail/${props.id}`)}} src = {props.image_url} shape = "rectangle"></Image>
-                    {props.direction === "R"?<Text>{props.contents}</Text> : ""}
+                    <Grid is_flex width = "250px">
+                        <Text>{props.insert_dt}</Text>
+                        {is_mine?<Button _onClick={() =>{deletePost(props.id)}} text="삭제" radius="10px" border_color="#fff0" BG_c="#4571eeab" width="50px"/>:""}
+                        {is_mine?<Button _onClick={() =>{editPost(props.id)}} text="수정" radius="10px" border_color="#fff0" BG_c="#4571eeab" width="50px"/>:""}
+                        
+                        
+                    </Grid>
                     
                 </Grid>
+                    <Grid is_flex flex_direction="column">
+                        {props.direction === "C"?<Text>{props.contents}</Text> : ""}
+                        <Grid is_flex = {props.direction === "C"?false : true} width="90%" padding = "16px">
+                            {props.direction === "L"?<Text>{props.contents}</Text> : ""}
+                            <Image _onClick={() =>{history.push(`/detail/${props.id}`)}} src = {props.image_url} shape = "rectangle"></Image>
+                            {props.direction === "R"?<Text>{props.contents}</Text> : ""}
+                            
+                        </Grid>
+                    </Grid>
                 <Grid is_flex padding = "16px" >
                     <Grid is_flex justify_content="flex-start">
                     <Text margin="0 20px 0 0" bold>댓글 {props.comment_cnt}개</Text>

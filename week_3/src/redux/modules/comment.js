@@ -18,7 +18,6 @@ const setComment = createAction(SET_COMMENT, (post_id, comment_list) => ({post_i
 const addComment = createAction(ADD_COMMENT, (post_id, comment) => ({post_id, comment}));
 const loading = createAction(LOADING, (is_loading) => ({ is_loading }));
 
-
 const initialState = {
     list: {},
     is_loading: false,

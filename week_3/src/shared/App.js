@@ -12,6 +12,7 @@ import Login from '../pages/Login';
 import Signup from '../pages/Signup';
 import Detail from '../pages/Detail';
 import PostWrite from '../pages/PostWrite';
+import PostEdit from '../pages/PostEdit'
 import Notification from '../pages/Notification';
 
 import Header from '../components/Header';
@@ -52,6 +53,7 @@ function App() {
           <Route path="/signup" exact component={Signup}/>
           <Route path="/detail/:id" exact component={Detail}/>
           <Route path="/postwrite" exact component={PostWrite}/>
+          <Route path="/postedit/:id" exact component={PostEdit}/>
           <Route path="/noti" exact component={Notification} />
         </ConnectedRouter>
 

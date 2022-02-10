@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 const Grid = (props) => {
 
-    const { _onClick, B_left, B_right ,flex_direction, justify_content,is_flex,width,margin, padding, BG_c, children,center} = props;
+    const { _onClick, B_left, B_right ,flex_direction, justify_content,is_flex,width,margin, height, padding, BG_c, children,center} = props;
     const styles = {
         is_flex : is_flex,
         flex_direction: flex_direction ,
@@ -16,6 +16,7 @@ const Grid = (props) => {
         center : center,
         B_left : B_left,
         B_right : B_right,
+        height : height,
 
     };
 
@@ -33,6 +34,7 @@ Grid.defaultProps ={
     children : null,
     is_flex :false,
     width : "100%",
+    height : "100%",
     padding : false,
     margin : false,
     BG_c : false,
@@ -42,7 +44,7 @@ Grid.defaultProps ={
 
 const GridBox = styled.div`
     width : ${(props)=> props.width};
-    height : 100%;
+    height : ${(props)=> props.height};
     box-sizing : border-box;
     ${(props) => (props.padding? `padding :${props.padding};`:"")}
     ${(props) => (props.margin? `margin : ${props.margin};`:"")}

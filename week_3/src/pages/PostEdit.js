@@ -29,12 +29,10 @@ const PostEdit = (props) => {
 
     
 
-    const [contents,setContents] = React.useState('');
+    const [contents,setContents] = React.useState(this_post.contents);
     const [direction,setDirection] = React.useState('R');
-    
-    const test = (e) =>{
-        e.target.value = "wjdjsafn";
-    }
+
+
 
     const changeContents = (e) =>{
         setContents(e.target.value);

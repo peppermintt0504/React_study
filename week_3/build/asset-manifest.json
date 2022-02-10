@@ -1,0 +1,18 @@
+{
+  "files": {
+    "main.css": "/static/css/main.13f4e8dd.css",
+    "main.js": "/static/js/main.c5fb4646.js",
+    "static/js/787.4732436e.chunk.js": "/static/js/787.4732436e.chunk.js",
+    "static/media/GamjaFlower-Regular.ttf": "/static/media/GamjaFlower-Regular.317f969e43bbf7cb06a0.ttf",
+    "static/media/MochiyPopPOne-Regular.ttf": "/static/media/MochiyPopPOne-Regular.a343480e7534e19d0c78.ttf",
+    "static/media/PoorStory-Regular.ttf": "/static/media/PoorStory-Regular.bec8ef9a74351552c94e.ttf",
+    "index.html": "/index.html",
+    "main.13f4e8dd.css.map": "/static/css/main.13f4e8dd.css.map",
+    "main.c5fb4646.js.map": "/static/js/main.c5fb4646.js.map",
+    "787.4732436e.chunk.js.map": "/static/js/787.4732436e.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.13f4e8dd.css",
+    "static/js/main.c5fb4646.js"
+  ]
+}

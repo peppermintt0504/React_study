@@ -11,15 +11,32 @@ import { emailCheck } from "../shared/common";
 const Login = (props) => {
     const [id, setId] = React.useState('');
     const [pwd, setPwd] = React.useState('');
+    const [idCheck,setIdCheck] = React.useState(true);
+    const [pwdCheck,setPwdCheck] = React.useState(true);
+
 
     const dispatch = useDispatch();
 
     const changeId = (e) => {
         setId(e.target.value);
+        
+        if(e.target.value === ""){
+            setIdCheck(true);
+        }else{
+            setIdCheck(false);
+        }
+        console.log(idCheck,pwdCheck ,idCheck || pwdCheck  )
     }
 
     const changePwd = (e) => {
         setPwd(e.target.value);
+        if(e.target.value === ""){
+            setPwdCheck(true);
+        }else{
+            setPwdCheck(false);
+        }
+        console.log(idCheck, pwdCheck,idCheck || pwdCheck)
+
     }
 
     const login = () => {
@@ -66,6 +83,7 @@ const Login = (props) => {
                 _onClick={() => {
                     login();
                 }}
+                disabled={idCheck || pwdCheck}
                 >로그인하기</Button>
             </Grid>
         </React.Fragment>

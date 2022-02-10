@@ -18,7 +18,7 @@ const PostList = (props) =>{
 
     
     React.useEffect(() =>{
-        if(post_list.length <= 1 )dispatch(postActions.getPostFB());
+        if(post_list.length < 2 )dispatch(postActions.getPostFB());
     }
     ,[])
 

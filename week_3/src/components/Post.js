@@ -31,9 +31,11 @@ const Post = (props) =>{
     
 
     const like = (post_id,user_id)=>{
-        if(!user_id)
+        if(!user_id){
+            window.alert("로그인이 필요합니다.");
             return;
-        dispatch(postActions.likeFB(post_id,user_id))
+        }
+        dispatch(postActions.likeFB(post_id,user_id));
     }
     const deletePost = (post_id)=>{
         if(!post_id)

@@ -70,7 +70,7 @@ const initialPost = {
 };
 
 //middleware actions
-const getPostFB=(start = null, size = 2) =>{
+const getPostFB=(start = null, size = 3) =>{
     return async function (dispatch,getState,{history}){
         let _paging = getState().post.paging;
         if(_paging.start && !_paging.next)

@@ -23,11 +23,13 @@ const initialState = {
     is_loading: false,
 };
 
+
 const addCommentFB =(post_id, contents) =>{
     return async function(dispatch, getState, {history}){
         const commentDB = collection(db,"comment");
         const post = doc(db,"post_community",post_id);
         const user_info = getState().user.user;
+
         const post_info = getState().post.list;
         const __post = post_info.reduce((x,v,i) => v.id === post_id?v:x,"");
         const post_uid = __post.user_info.uid;
@@ -41,7 +43,6 @@ const addCommentFB =(post_id, contents) =>{
             user_profile : user_info.user_profile,
             contents : contents,
             insert_dt : moment().format("YYYY-MM-DD hh:mm:ss"),
-
         }
         
         await addDoc(commentDB,comment);

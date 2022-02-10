@@ -29,12 +29,12 @@ const Header = (props) => {
     if(is_login && is_session){
         return(
             <React.Fragment>
-                <Grid BG_c="#d2dbf4" is_flex padding="4px 16px">
+                <Grid  BG_c="#d2dbf4" is_flex padding="4px 16px">
                     <Grid>
                         <Text cursor={"pointer"} font_style={"italic"} _onClick= {() => history.push("/")} margin="0px" size="30px" bold>IDontKnowWhatToCallThisSite</Text>
                     </Grid>
 
-                    <Grid justify_content="space-around" is_flex>
+                    <Grid margin="0 100px" flex_direction= "row-reverse" justify_content="space-end" is_flex>
                         <Grid is_flex width="200px">
                         <NotiBadge _onClick= {alt}/>
                         <Button radius="10px" border_color="#fff0" BG_c="#4571eeab" width="150px" text="로그아웃" _onClick ={() => dispatch(userAction.logoutFB({}))}></Button>
@@ -53,7 +53,7 @@ const Header = (props) => {
                         <Text _onClick= {() => {history.push("/")}} margin="0px" size="24px" bold>IDontKnowWhatToCallThisSite</Text>
                     </Grid>
                     
-                    <Grid justify_content="space-around" is_flex>
+                    <Grid margin="0 100px" width="800px" flex_direction= "row" justify_content="space-around" is_flex>
                         <Button radius="10px" border_color="#fff0" BG_c="#4571eeab" width="150px" _onClick= {() => {history.push("/login")}} text="로그인"></Button>
                         <Button radius="10px" border_color="#fff0" BG_c="#4571eeab" width="150px" _onClick= {() => {history.push("/signup")}} text="회원가입"></Button>
                     </Grid>

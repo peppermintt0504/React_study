@@ -28,7 +28,7 @@ const CommentWrite = (props) =>{
     return(
         <React.Fragment>
             <Grid is_flex="true" padding="20px">
-                <Image src = {props.src} shape = "circle"></Image>
+                <Image src = {props.src} shape = "circle"/>
                 <Grid><Input value={contents} _onChange={(e) => {setContents(e.target.value);}} B_radius="3px" height="50px" width="95%" placeholder="댓글 내용을 입력해주세요."></Input></Grid>
                 <Button _onClick={write} radius="10px" border_color="#fff0" BG_c="#4571eeab" width="60px" height="50px" text="작성" background_color="gray"></Button>
             </Grid>

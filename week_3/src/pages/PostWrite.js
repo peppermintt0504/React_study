@@ -15,12 +15,20 @@ const PostWrite = (props) => {
     const is_login = useSelector((state) => state.user.is_login);
     const preview = useSelector((state) => state.image.preview);
 
+    const post_c = React.useRef(null);
+
     const [contents,setContents] = React.useState('');
     const [direction,setDirection] = React.useState('R');
+    const [contentCheck,setContentCheck] = React.useState(true);
     
 
     const changeContents = (e) =>{
         setContents(e.target.value);
+        if(e.target.value === "" || preview === null){
+            setContentCheck(true);
+        }else{
+            setContentCheck(false);
+        }
     }
 
     const addPost = () =>{
@@ -49,7 +57,7 @@ const PostWrite = (props) => {
                 <Grid padding="16px">
                 <Text>게시물 방향</Text>
                 <select onChange={(e) => 
-                    setDirection(e.target.value)}>
+                    changeContents}>
                     <option value={"R"}>오른쪽</option>
                     <option value={"L"}>왼쪽</option>
                     <option value={"C"}>중앙</option>
@@ -70,7 +78,7 @@ const PostWrite = (props) => {
                 </Grid>
 
                 <Grid padding="16px">
-                <Button radius="10px" border_color="#fff0" BG_c="#4571eeab" _onClick={addPost} text="게시글 작성"></Button>
+                <Button _ref={post_c} radius="10px" border_color="#fff0" BG_c="#4571eeab" _onClick={addPost} text= "게시글 작성" disabled = {contentCheck} ></Button>
                 </Grid>
             </Grid>
         </React.Fragment>

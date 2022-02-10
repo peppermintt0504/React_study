@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 
 const Button = (props) => {
-    const { radius,border_color ,width, height, color, text, _onClick, BG_c,is_float, children} = props;
+    const {  _ref,radius,border_color ,width, height, color, text, _onClick, BG_c,is_float, disabled, children} = props;
     
     const sytles = {
         color : color,
@@ -12,6 +12,7 @@ const Button = (props) => {
         width: width,
         border_color : border_color,
         radius : radius,
+
     }
     
     
@@ -24,7 +25,7 @@ const Button = (props) => {
 
     return (
     <div>
-        <Btn {...sytles} onClick={()=>_onClick()} >{text}</Btn>
+        <Btn {...sytles} ref={_ref} onClick={()=>_onClick()} disabled={disabled}>{text} </Btn>
     </div>
     );
 }
@@ -38,6 +39,9 @@ Button.defaultProps ={
     is_float : false,
     border_color: null,
     radius : null,
+    disabled : false,
+    _ref:null,
+
 
 
 };
